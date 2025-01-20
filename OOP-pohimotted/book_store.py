@@ -17,7 +17,8 @@ class Book:
         self.price = price
         self.rating = rating
         
-        
+      
+    
 
 
 
@@ -36,7 +37,9 @@ class Store:
 
         :param name: book store name
         """
-        pass
+        self.name = name
+        self.rating = rating
+        self.books = []
 
     def can_add_book(self, book: Book) -> bool:
         """
@@ -47,7 +50,12 @@ class Store:
         2. book's own rating is >= than store's rating
         :return: bool
         """
-        pass
+        for existing_book in self.books:
+            if existing_book.title == book.title and existing_book.author == book.author:
+                return False
+        return book.rating >= self.rating
+
+            
 
     def add_book(self, book: Book):
         """
@@ -56,7 +64,9 @@ class Store:
         :param book: Book
         Function does not return anything
         """
-        pass
+        if self.can_add_book(book):
+            self.books.append(book)
+            
 
     def can_remove_book(self, book: Book) -> bool:
         """
@@ -66,7 +76,10 @@ class Store:
 
         :return: bool
         """
-        pass
+        for existing_book in self.books:
+            if existing_book.title == book.title and existing_book.author == book.author:
+                return True
+        return False
 
     def remove_book(self, book: Book):
         """
@@ -74,7 +87,9 @@ class Store:
 
         Function does not return anything
         """
-        pass
+        if self.can_remove_book(book):
+            self.books = [b for b in self.books if not (b.title == book.title and b.author == book.author)]
+ 
 
     def get_all_books(self) -> list:
         """
@@ -82,7 +97,7 @@ class Store:
 
         :return: list of Book objects
         """
-        pass
+        return self.books
 
     def get_books_by_price(self) -> list:
         """
@@ -90,7 +105,8 @@ class Store:
 
         :return: list of Book objects
         """
-        pass
+        
+        return sorted(self.books, key=lambda book: book.price)
 
     def get_most_popular_book(self) -> list:
         """
@@ -98,4 +114,9 @@ class Store:
 
         :return: list of Book objects
         """
-        pass
+        if not self.books:
+            return []
+        max_rating = max(book.rating for book in self.books)
+        return [book for book in self.books if book.rating == max_rating]
+
+
